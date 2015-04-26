@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 25, 2015 9:03:17 PM by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="org.com.myapp.entity.User" table="user" catalog="crossworddb">
+        <id name="idUser" type="java.lang.Integer">
+            <column name="IdUser" />
+            <generator class="identity" />
+        </id>
+        <property name="userName" type="string">
+            <column name="UserName" length="128" not-null="true" />
+        </property>
+        <property name="email" type="string">
+            <column name="Email" length="128" not-null="true" />
+        </property>
+        <set name="scores" table="score" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="IdUser" not-null="true" />
+            </key>
+            <one-to-many class="org.com.myapp.entity.Score" />
+        </set>
+        <set name="roles" table="usersinroles" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="IdUser" not-null="true" />
+            </key>
+            <many-to-many entity-name="org.com.myapp.entity.Role">
+                <column name="IdRole" not-null="true" />
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

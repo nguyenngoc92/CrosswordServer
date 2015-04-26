@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Apr 25, 2015 9:03:17 PM by Hibernate Tools 3.6.0 -->
+<hibernate-mapping>
+    <class name="org.com.myapp.entity.Item" table="item" catalog="crossworddb">
+        <id name="idItem" type="java.lang.Integer">
+            <column name="IdItem" />
+            <generator class="identity" />
+        </id>
+        <property name="question" type="string">
+            <column name="Question" length="256" />
+        </property>
+        <property name="answer" type="string">
+            <column name="Answer" length="45" />
+        </property>
+        <property name="count" type="java.lang.Integer">
+            <column name="Count" />
+        </property>
+        <property name="createDate" type="timestamp">
+            <column name="CreateDate" length="19" />
+        </property>
+        <set name="matches" table="itemsinmatches" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="IdItem" not-null="true" />
+            </key>
+            <many-to-many entity-name="org.com.myapp.entity.Match">
+                <column name="IdMatch" not-null="true" />
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>
