@@ -1,6 +1,6 @@
 package org.com.myapp.entity;
-// Generated Apr 25, 2015 9:03:17 PM by Hibernate Tools 3.6.0
 
+// Generated Apr 25, 2015 9:03:17 PM by Hibernate Tools 3.6.0
 
 import java.util.Date;
 import java.util.HashSet;
@@ -27,105 +27,99 @@ import javax.persistence.TemporalType;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name="match"
-    ,catalog="crossworddb"
-)
-public class Match  implements java.io.Serializable {
+@Table(name = "match", catalog = "crossworddb")
+public class Match implements java.io.Serializable {
 
+	private Integer idMatch;
+	private Subject subject;
+	private Competition competition;
+	private String title;
+	private Date createDate;
+	private Set<Item> items = new HashSet<Item>(0);
+	private Set<Score> scores = new HashSet<Score>(0);
 
-     private Integer idMatch;
-     private Subject subject;
-     private Competition competition;
-     private String title;
-     private Date createDate;
-     private Set<Item> items = new HashSet<Item>(0);
-     private Set<Score> scores = new HashSet<Score>(0);
+	public Match() {
+	}
 
-    public Match() {
-    }
+	public Match(Subject subject, Competition competition, String title,
+			Date createDate, Set<Item> items, Set<Score> scores) {
+		this.subject = subject;
+		this.competition = competition;
+		this.title = title;
+		this.createDate = createDate;
+		this.items = items;
+		this.scores = scores;
+	}
 
-    public Match(Subject subject, Competition competition, String title, Date createDate, Set<Item> items, Set<Score> scores) {
-       this.subject = subject;
-       this.competition = competition;
-       this.title = title;
-       this.createDate = createDate;
-       this.items = items;
-       this.scores = scores;
-    }
-   
-     @Id @GeneratedValue(strategy=IDENTITY)
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "IdMatch", unique = true, nullable = false)
+	public Integer getIdMatch() {
+		return this.idMatch;
+	}
 
-    
-    @Column(name="IdMatch", unique=true, nullable=false)
-    public Integer getIdMatch() {
-        return this.idMatch;
-    }
-    
-    public void setIdMatch(Integer idMatch) {
-        this.idMatch = idMatch;
-    }
+	public void setIdMatch(Integer idMatch) {
+		this.idMatch = idMatch;
+	}
 
-@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="IdSubject")
-    public Subject getSubject() {
-        return this.subject;
-    }
-    
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "IdSubject")
+	public Subject getSubject() {
+		return this.subject;
+	}
 
-@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="IdCompetition")
-    public Competition getCompetition() {
-        return this.competition;
-    }
-    
-    public void setCompetition(Competition competition) {
-        this.competition = competition;
-    }
+	public void setSubject(Subject subject) {
+		this.subject = subject;
+	}
 
-    
-    @Column(name="Title", length=128)
-    public String getTitle() {
-        return this.title;
-    }
-    
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "IdCompetition")
+	public Competition getCompetition() {
+		return this.competition;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="CreateDate", length=19)
-    public Date getCreateDate() {
-        return this.createDate;
-    }
-    
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+	public void setCompetition(Competition competition) {
+		this.competition = competition;
+	}
 
-@ManyToMany(fetch=FetchType.LAZY, mappedBy="matches")
-    public Set<Item> getItems() {
-        return this.items;
-    }
-    
-    public void setItems(Set<Item> items) {
-        this.items = items;
-    }
+	@Column(name = "Title", length = 128)
+	public String getTitle() {
+		return this.title;
+	}
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="match")
-    public Set<Score> getScores() {
-        return this.scores;
-    }
-    
-    public void setScores(Set<Score> scores) {
-        this.scores = scores;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "CreateDate", length = 19)
+	public Date getCreateDate() {
+		return this.createDate;
+	}
 
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {
+			javax.persistence.CascadeType.PERSIST,
+			javax.persistence.CascadeType.REMOVE }, mappedBy = "matches")
+	@org.hibernate.annotations.Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE })
+	public Set<Item> getItems() {
+		return this.items;
+	}
+
+	public void setItems(Set<Item> items) {
+		this.items = items;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "match")
+	public Set<Score> getScores() {
+		return this.scores;
+	}
+
+	public void setScores(Set<Score> scores) {
+		this.scores = scores;
+	}
 
 }
-
-

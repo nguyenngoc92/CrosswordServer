@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.com.myapp.entity.Subject;
+import org.com.myapp.model.SubjectData;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -89,6 +91,35 @@ public class SubjectReposityImpl implements SubjectReposity {
 
 		return new ArrayList<Subject>();
 	}
+
+	public List<SubjectData> getAllSubjectData() throws DAOException {
+
+		try {
+
+			Session session = getSession();
+			String sql = "select s.IdSubject,s.Name,s.CreateDate, count(m.IdMatch) as TotalMatch "
+					+ "from crossworddb.subject as s, crossworddb.match as m "
+					+ "where s.IdSubject = m.IdSubject "
+					+ "group by s.IdSubject";
+
+			@SuppressWarnings("unchecked")
+			List<SubjectData> dataList = session
+					.createSQLQuery(sql)
+					.setResultTransformer(
+							Transformers.aliasToBean(SubjectData.class)).list();
+
+			if (dataList == null)
+				return new ArrayList<SubjectData>();
+
+			return dataList;
+
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new DAOException("Data acess error", e);
+		}
+
+	}
+
 
 	private Session getSession() {
 		Session session = sessionFactory.getCurrentSession();

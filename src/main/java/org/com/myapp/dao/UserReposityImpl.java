@@ -7,6 +7,8 @@ import org.com.myapp.entity.Membership;
 import org.com.myapp.entity.Role;
 import org.com.myapp.entity.User;
 import org.com.myapp.model.MyUser;
+import org.com.myapp.model.SubjectData;
+import org.com.myapp.model.UserData;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -117,23 +119,41 @@ public class UserReposityImpl implements UserReposity {
 			session.save(user);
 			session.getTransaction().commit();
 
+			System.out.println(user.getIdUser());
 			return user;
 		} catch (HibernateException e) {
 			e.printStackTrace();
+			session.getTransaction().rollback();
 		}
 		return null;
 	}
 
 	public void saveMembership(Membership membership) {
 
+		Session session = getSession();
 		try {
 
-			Session session = getSession();
 			session.save(membership);
+			session.getTransaction().commit();
 		} catch (HibernateException e) {
 			e.printStackTrace();
+			session.getTransaction().rollback();
 		}
 
+	}
+
+	public List<SubjectData> getAllSubjectDataByUserId(int id)
+			throws DAOException {
+
+		try {
+
+		} catch (HibernateException e) {
+
+			e.printStackTrace();
+			throw new DAOException("Data acess error", e);
+		}
+
+		return null;
 	}
 
 	private Session getSession() {
@@ -150,5 +170,26 @@ public class UserReposityImpl implements UserReposity {
 
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
+	}
+
+	public UserData getUserInfor(int id) {
+
+		String sql = "CALL crossworddb.getUserScoreAndRank(:id)";
+
+		UserData value = (UserData) getSession().createSQLQuery(sql)
+				.setResultTransformer(Transformers.aliasToBean(UserData.class))
+				.setParameter("id", id).uniqueResult();
+
+		return value;
+	}
+
+	public ArrayList<UserData> getUserInforList(int n) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ArrayList<UserData> getUserRankAndScoreList(int idRow, int limit) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -1,7 +1,8 @@
 package org.com.myapp.entity;
+
 // Generated Apr 25, 2015 9:03:17 PM by Hibernate Tools 3.6.0
 
-
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,97 +27,89 @@ import javax.persistence.TemporalType;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name="item"
-    ,catalog="crossworddb"
-)
-public class Item  implements java.io.Serializable {
+@Table(name = "item", catalog = "crossworddb")
+public class Item implements java.io.Serializable, Comparator<Item> {
 
+	private Integer idItem;
+	private String question;
+	private String answer;
+	private Integer count;
+	private Date createDate;
+	private Set<Match> matches = new HashSet<Match>(0);
 
-     private Integer idItem;
-     private String question;
-     private String answer;
-     private Integer count;
-     private Date createDate;
-     private Set<Match> matches = new HashSet<Match>(0);
+	public Item() {
+	}
 
-    public Item() {
-    }
+	public Item(String question, String answer, Integer count, Date createDate,
+			Set<Match> matches) {
+		this.question = question;
+		this.answer = answer;
+		this.count = count;
+		this.createDate = createDate;
+		this.matches = matches;
+	}
 
-    public Item(String question, String answer, Integer count, Date createDate, Set<Match> matches) {
-       this.question = question;
-       this.answer = answer;
-       this.count = count;
-       this.createDate = createDate;
-       this.matches = matches;
-    }
-   
-     @Id @GeneratedValue(strategy=IDENTITY)
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "IdItem", unique = true, nullable = false)
+	public Integer getIdItem() {
+		return this.idItem;
+	}
 
-    
-    @Column(name="IdItem", unique=true, nullable=false)
-    public Integer getIdItem() {
-        return this.idItem;
-    }
-    
-    public void setIdItem(Integer idItem) {
-        this.idItem = idItem;
-    }
+	public void setIdItem(Integer idItem) {
+		this.idItem = idItem;
+	}
 
-    
-    @Column(name="Question", length=256)
-    public String getQuestion() {
-        return this.question;
-    }
-    
-    public void setQuestion(String question) {
-        this.question = question;
-    }
+	@Column(name = "Question", length = 256)
+	public String getQuestion() {
+		return this.question;
+	}
 
-    
-    @Column(name="Answer", length=45)
-    public String getAnswer() {
-        return this.answer;
-    }
-    
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
+	public void setQuestion(String question) {
+		this.question = question;
+	}
 
-    
-    @Column(name="Count")
-    public Integer getCount() {
-        return this.count;
-    }
-    
-    public void setCount(Integer count) {
-        this.count = count;
-    }
+	@Column(name = "Answer", length = 45)
+	public String getAnswer() {
+		return this.answer;
+	}
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="CreateDate", length=19)
-    public Date getCreateDate() {
-        return this.createDate;
-    }
-    
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+	public void setAnswer(String answer) {
+		this.answer = answer;
+	}
 
-@ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="itemsinmatches", catalog="crossworddb", joinColumns = { 
-        @JoinColumn(name="IdItem", nullable=false, updatable=false) }, inverseJoinColumns = { 
-        @JoinColumn(name="IdMatch", nullable=false, updatable=false) })
-    public Set<Match> getMatches() {
-        return this.matches;
-    }
-    
-    public void setMatches(Set<Match> matches) {
-        this.matches = matches;
-    }
+	@Column(name = "Count")
+	public Integer getCount() {
+		return this.count;
+	}
 
+	public void setCount(Integer count) {
+		this.count = count;
+	}
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "CreateDate", length = 19)
+	public Date getCreateDate() {
+		return this.createDate;
+	}
 
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "itemsinmatches", catalog = "crossworddb", joinColumns = { @JoinColumn(name = "IdItem", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "IdMatch", nullable = false, updatable = false) })
+	public Set<Match> getMatches() {
+		return this.matches;
+	}
+
+	public void setMatches(Set<Match> matches) {
+		this.matches = matches;
+	}
+
+	public int compare(Item o1, Item o2) {
+
+		return o1.getIdItem() - o2.getIdItem();
+	}
 
 }
-
-

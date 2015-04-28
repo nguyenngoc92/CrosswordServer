@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/", "/public/", "/register")
-				.permitAll().antMatchers("/user").hasAuthority("ROLE_USER")
+				.permitAll().antMatchers("/user/**").hasAuthority("ROLE_USER")
 				.and().formLogin()
 				.loginPage("/login").failureUrl("/login?error=1")
 				.usernameParameter("email").passwordParameter("password")

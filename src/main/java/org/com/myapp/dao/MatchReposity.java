@@ -14,6 +14,10 @@ public interface MatchReposity {
 
 	Match delete(Match match) throws DAOException;
 
-	List<Match> getListMatchPaging(int id, int lenght)
+	List<Match> getListMatchPaging(int id, int lenght) throws DAOException;
+
+	List<Match> getAllMatchByCompetiton(int id) throws DAOException;
+
+	Match getMatchBySubjectAndUser(int idSubject, int idUser)
 			throws DAOException;
 }
