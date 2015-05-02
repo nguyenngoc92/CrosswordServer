@@ -31,4 +31,15 @@ public interface UserReposity {
 	ArrayList<UserData> getUserInforList(int n);
 
 	ArrayList<UserData> getUserRankAndScoreList(int idRow, int limit);
+
+	UserData getUserRankByMatch(int idUser, int idMatch) throws DAOException;
+
+	List<UserData> getTopListRankUserByMatchId(int id, int lenght)
+			throws DAOException;
+
+	UserData getUserRankByCompetition(int idUser, int idCompetition)
+			throws DAOException;
+
+	List<UserData> getTopListRankUserByCompetitionId(int id, int lenght)
+			throws DAOException;
 }

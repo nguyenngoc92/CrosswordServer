@@ -5,10 +5,14 @@ import java.util.List;
 import org.com.myapp.entity.Match;
 import org.com.myapp.model.CurrentUser;
 import org.com.myapp.model.MatchData;
+import org.com.myapp.service.CompetitionService;
 import org.com.myapp.service.MatchService;
 import org.com.myapp.service.ServiceException;
+import org.com.myapp.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.Validator;
@@ -26,6 +30,11 @@ public class MatchController {
 
 	@Autowired
 	private MatchService matchService;
+
+	@Autowired
+	private SubjectService subjectService;
+	@Autowired
+	private CompetitionService competitionService;
 
 	@Autowired
 	@Qualifier("matchFormValidator")
@@ -53,13 +62,34 @@ public class MatchController {
 	}
 
 	@RequestMapping(value = "/user/subject/{idsubject}/match", method = RequestMethod.GET)
-	public MatchData getMatchBySubjectIdAndUserId(
+	public ResponseEntity<MatchData> getMatchBySubjectIdAndUserId(
 			@PathVariable("idsubject") int idsubject) throws ServiceException {
 
 		CurrentUser user = getAuthenticatedUser();
 
-		return matchService.getMatchNextBySubjectAndUser(idsubject,
-				user.getId());
+		if (subjectService.getSubjectById(idsubject) == null) {
+			return new ResponseEntity<MatchData>(HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<MatchData>(
+				matchService.getMatchNextBySubjectAndUser(idsubject,
+						user.getId()), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/user/competition/{idcompetition}/match", method = RequestMethod.GET)
+	public ResponseEntity<MatchData> getMatchByCompetitionIdAndUserId(
+			@PathVariable("idcompetition") int idcompetition)
+			throws ServiceException {
+
+		CurrentUser user = getAuthenticatedUser();
+
+		if (competitionService.findCompetitionById(idcompetition) == null) {
+			return new ResponseEntity<MatchData>(HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<MatchData>(
+				matchService.getMatchNextByCompetitionAndUser(idcompetition,
+						user.getId()), HttpStatus.OK);
 	}
 
 	private CurrentUser getAuthenticatedUser() {

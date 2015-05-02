@@ -7,7 +7,7 @@
 	<artifactId>ngoc-app-crossword-server</artifactId>
 	<version>1.0.0.CI-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	
+
 	<parent>
 		<groupId>org.springframework.cloud</groupId>
 		<artifactId>spring-cloud-starter-parent</artifactId>
@@ -114,15 +114,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-freemarker</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-
 
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>

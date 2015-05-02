@@ -1,9 +1,6 @@
 package org.com.myapp.controller;
 
 import org.com.myapp.entity.Match;
-import org.com.myapp.entity.Role;
-import org.com.myapp.model.MyUser;
-import org.com.myapp.model.RegisterForm;
 import org.com.myapp.service.MatchService;
 import org.com.myapp.service.ServiceException;
 import org.com.myapp.service.UserService;
@@ -20,7 +17,6 @@ public class HomeController {
 	@Autowired
 	private MatchService matchService;
 
-	@RequestMapping("/")
 	public String home() {
 /*
 		Role r = userService.getRoleByName("ROLE_USER");

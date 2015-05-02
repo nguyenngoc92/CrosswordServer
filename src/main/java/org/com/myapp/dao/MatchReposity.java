@@ -20,4 +20,7 @@ public interface MatchReposity {
 
 	Match getMatchBySubjectAndUser(int idSubject, int idUser)
 			throws DAOException;
+
+	Match getMatchByCompetitionAndUser(int idCompetition, int idUser)
+			throws DAOException;
 }

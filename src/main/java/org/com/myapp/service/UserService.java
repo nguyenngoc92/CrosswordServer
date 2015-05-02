@@ -34,6 +34,15 @@ public interface UserService {
 	UserData updateUserScore(int idUser, int matchId, float score, float time)
 			throws ServiceException;
 
-	// void updateUserScore(int idUser, int matchId, int score, int time);
+	UserData getUserRankByMatch(int idUser, int idMatch)
+			throws ServiceException;
 
+	List<UserData> getTopRankUserByMatch(int id, int lenght)
+			throws ServiceException;
+
+	UserData getUserRankByCompetition(int idUser, int idCompetition)
+			throws ServiceException;
+
+	List<UserData> getTopRankUserByCompetition(int id, int lenght)
+			throws ServiceException;
 }

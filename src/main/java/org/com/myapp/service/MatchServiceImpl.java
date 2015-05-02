@@ -97,6 +97,32 @@ public class MatchServiceImpl implements MatchService {
 
 	}
 
+	public MatchData getMatchNextByCompetitionAndUser(int idCompetition,
+			int idUser) throws ServiceException {
+
+		Match match;
+		try {
+			match = matchReposity.getMatchByCompetitionAndUser(idCompetition,
+					idUser);
+			MatchData data = new MatchData();
+			if (match == null)
+				return data;
+
+			data = convertToMatchData(match);
+
+			List<Item> items = itemReposity.getListItemByMatchId(match
+					.getIdMatch());
+
+			data.setItems(convertToItemData(items));
+
+			return data;
+
+		} catch (DAOException e) {
+			e.printStackTrace();
+			throw new ServiceException("Database error", e);
+		}
+	}
+
 	private ArrayList<ItemData> convertToItemData(List<Item> items) {
 
 		ArrayList<ItemData> itemDatas = new ArrayList<ItemData>();
@@ -112,7 +138,15 @@ public class MatchServiceImpl implements MatchService {
 		MatchData data = new MatchData();
 		data.setId(match.getIdMatch());
 		data.setTitle(match.getTitle());
-		data.setIdSubject(match.getSubject().getIdSubject());
+
+		if (match.getSubject() != null) {
+			data.setIdSubject(match.getSubject().getIdSubject());
+		}
+
+		if (match.getCompetition() != null) {
+			data.setCompetition(match.getCompetition().getIdCompetition());
+		}
+
 		return data;
 	}
 

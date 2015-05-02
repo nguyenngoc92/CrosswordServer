@@ -162,6 +162,30 @@ public class MatchReposityImpl implements MatchReposity {
 
 	}
 
+	public Match getMatchByCompetitionAndUser(int idCompetition, int idUser)
+			throws DAOException {
+
+		try {
+			Session session = getSession();
+			String sql = " select m.* "
+					+ "from crossworddb.match as m "
+					+ "where m.IdMatch not in (select c.IdMatch from crossworddb.score as c where c.IdUser =:idUser) "
+					+ "and m.IdCompetition =:idCompetition "
+					+ "order by m.IdMatch asc limit 1";
+			Match match = (Match) session.createSQLQuery(sql)
+					.addEntity(Match.class).setParameter("idUser", idUser)
+					.setParameter("idCompetition", idCompetition)
+					.uniqueResult();
+
+			return match;
+
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new DAOException("Data acess error", e);
+		}
+
+	}
+
 	private Session getSession() {
 		Session session = sessionFactory.getCurrentSession();
 		if (session == null) {

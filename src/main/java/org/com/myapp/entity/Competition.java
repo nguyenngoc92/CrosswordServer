@@ -1,5 +1,5 @@
 package org.com.myapp.entity;
-// Generated Apr 25, 2015 9:03:17 PM by Hibernate Tools 3.6.0
+// Generated Apr 29, 2015 4:25:15 PM by Hibernate Tools 3.6.0
 
 
 import java.util.Date;
@@ -36,17 +36,19 @@ public class Competition  implements java.io.Serializable {
      private Date begin;
      private Date end;
      private Date createDate;
+     private Boolean isActive;
      private Set<Match> matches = new HashSet<Match>(0);
 
     public Competition() {
     }
 
-    public Competition(String name, String note, Date begin, Date end, Date createDate, Set<Match> matches) {
+    public Competition(String name, String note, Date begin, Date end, Date createDate, Boolean isActive, Set<Match> matches) {
        this.name = name;
        this.note = note;
        this.begin = begin;
        this.end = end;
        this.createDate = createDate;
+       this.isActive = isActive;
        this.matches = matches;
     }
    
@@ -110,6 +112,16 @@ public class Competition  implements java.io.Serializable {
     
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    
+    @Column(name="isActive")
+    public Boolean getIsActive() {
+        return this.isActive;
+    }
+    
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="competition")

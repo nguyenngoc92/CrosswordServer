@@ -20,5 +20,8 @@ public interface MatchService {
 	MatchData getMatchNextBySubjectAndUser(int idSubject, int idUser)
 			throws ServiceException;
 
+	MatchData getMatchNextByCompetitionAndUser(int idCompetition, int idUser)
+			throws ServiceException;
+
 	Match update(Match match) throws ServiceException;
 }

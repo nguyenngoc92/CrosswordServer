@@ -1,5 +1,6 @@
 package org.com.myapp.dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -192,4 +193,122 @@ public class UserReposityImpl implements UserReposity {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public UserData getUserRankByMatch(int idUser, int idMatch)
+			throws DAOException {
+
+		try {
+
+			System.out.println(idUser + " " + idMatch);
+			Session session = getSession();
+			String sql = "CALL crossworddb.getRankUserByMatch(:idUser, :idMatch)";
+			UserData userData = (UserData) session
+					.createSQLQuery(sql)
+					.setParameter("idUser", idUser)
+					.setParameter("idMatch", idMatch)
+					.setResultTransformer(
+							Transformers.aliasToBean(UserData.class))
+					.uniqueResult();
+
+			return userData;
+
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new DAOException("Data acess error", e);
+		}
+
+	}
+
+	public List<UserData> getTopListRankUserByMatchId(int id, int lenght)
+			throws DAOException {
+
+		try {
+			Session session = getSession();
+			String sql = "CALL crossworddb.getTopRankUserByMatchId(:id,:lenght)";
+
+			@SuppressWarnings("unchecked")
+			List<UserData> usList = session
+					.createSQLQuery(sql)
+					.setParameter("id", id)
+					.setParameter("lenght", lenght)
+					.setResultTransformer(
+							Transformers.aliasToBean(UserData.class)).list();
+
+			if (usList != null)
+				return usList;
+			else
+				return new ArrayList<UserData>();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new DAOException("Data acess error", e);
+		}
+	}
+
+	public UserData getUserRankByCompetition(int idUser, int idCompetition)
+			throws DAOException {
+
+		try {
+
+			Session session = getSession();
+			String sql = "CALL crossworddb.getUserScoreAndRankByCompetition(:idUser, :idCompetition)";
+			Object data = session.createSQLQuery(sql)
+					.setParameter("idUser", idUser)
+					.setParameter("idCompetition", idCompetition)
+					.uniqueResult();
+			if (data != null) {
+
+				Object[] result = (Object[]) data;
+
+				UserData userData = new UserData();
+				userData.setUsername((String) result[0]);
+				userData.setScore(((BigDecimal) result[1]).doubleValue());
+				userData.setRank((Double) result[2]);
+
+				return userData;
+			}
+
+			return null;
+
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new DAOException("Data acess error", e);
+		}
+
+	}
+
+	public List<UserData> getTopListRankUserByCompetitionId(int id, int lenght)
+			throws DAOException {
+
+		try {
+
+			Session session = getSession();
+
+			String sql = "CALL crossworddb.getTopRankUserByCompetition(:id,:lenght)";
+			List<UserData> list = new ArrayList<UserData>();
+			@SuppressWarnings("unchecked")
+			List<Object> listUserDatas = session.createSQLQuery(sql)
+					.setParameter("id", id).setParameter("lenght", lenght)
+					.list();
+			if (listUserDatas != null) {
+
+				for (Object object : listUserDatas) {
+
+					Object[] result = (Object[]) object;
+
+					UserData userData = new UserData();
+					userData.setUsername((String) result[0]);
+					userData.setScore(((BigDecimal) result[1]).doubleValue());
+					userData.setRank((Double) result[2]);
+					list.add(userData);
+				}
+			}
+
+			return list;
+
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new DAOException("Data acess error", e);
+		}
+	}
+
 }

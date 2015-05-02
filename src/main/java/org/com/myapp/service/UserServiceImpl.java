@@ -151,7 +151,8 @@ public class UserServiceImpl implements UserService {
 				scoreObject.setCreateDate(new Date());
 				scoreReposity.save(scoreObject);
 
-				UserData userData = userReposity.getUserInfor(idUser);
+				UserData userData = userReposity.getUserRankByMatch(idUser,
+						matchId);
 
 				return userData;
 
@@ -163,6 +164,64 @@ public class UserServiceImpl implements UserService {
 			throw new ServiceException("Database error", e);
 		}
 
+	}
+
+	public UserData getUserRankByMatch(int idUser, int idMatch)
+			throws ServiceException {
+
+		try {
+
+			return userReposity.getUserRankByMatch(idUser, idMatch);
+
+		} catch (DAOException e) {
+
+			throw new ServiceException("Database error", e);
+		}
+
+	}
+
+	public List<UserData> getTopRankUserByMatch(int id, int lenght)
+			throws ServiceException {
+		try {
+
+			return userReposity.getTopListRankUserByMatchId(id, lenght);
+
+		} catch (DAOException e) {
+			throw new ServiceException("Database error", e);
+		}
+	}
+
+	public UserData getUserRankByCompetition(int idUser, int idCompetition)
+			throws ServiceException {
+		try {
+
+			UserData userData = userReposity.getUserRankByCompetition(idUser,
+					idCompetition);
+
+			if (userData == null) {
+				userData = new UserData();
+				userData.setRank(0);
+				userData.setScore(0);
+				userData.setUsername("NOT_HAVE_SCORE");
+			}
+			return userData;
+
+		} catch (DAOException e) {
+
+			throw new ServiceException("Database error", e);
+		}
+	}
+
+	public List<UserData> getTopRankUserByCompetition(int id, int lenght)
+			throws ServiceException {
+		try {
+
+			return userReposity.getTopListRankUserByCompetitionId(id, lenght);
+
+		} catch (DAOException e) {
+
+			throw new ServiceException("Database error", e);
+		}
 	}
 
 	public void setUserReposity(UserReposity userReposity) {
